@@ -1,0 +1,12 @@
+.view-icon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+  }
+  
+  .view-icon .fa-eye {
+    color: #4A5568;
+    cursor: pointer;
+  }
+  

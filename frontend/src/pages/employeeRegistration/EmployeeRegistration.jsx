@@ -22,11 +22,10 @@ const EmployeeRegistration = () => {
         const { name, value, type, checked } = e.target;
 
         if (type === 'radio' && name === 'currentlyWorking') {
-            // Handle radio button change for currentlyWorking
             setFormData({
                 ...formData,
-                [name]: value === 'true', // Convert string 'true'/'false' to boolean
-                quitReason: value === 'true' ? '' : formData.quitReason, // Clear fields if switching to 'true'
+                [name]: value === 'true',
+                quitReason: value === 'true' ? '' : formData.quitReason, 
                 lastWorkingDate: value === 'true' ? '' : formData.lastWorkingDate,
                 previousSalary: value === 'true' ? '' : formData.previousSalary,
             });

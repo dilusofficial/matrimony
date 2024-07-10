@@ -127,7 +127,7 @@ const Register = () => {
 
     try {
       const { otp, ...otherDetails } = formData
-      const response = await axios.put('http://localhost:8003/api/auth/register/:id', otherDetails);
+      const response = await axios.put('http://localhost:8003/api/auth/register/:userId', otherDetails);
       if (response.status === 200) {
         navigate(`/EmploymentSelectionPage/${userId}`);
       } else {

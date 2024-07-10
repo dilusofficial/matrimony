@@ -1,9 +1,16 @@
-import React from 'react'
+// src/pages/home/Home.js
+
+import React from 'react';
+import Homeheader from '../../components/homeHeader/HomeHeader';
+
 
 function Home() {
   return (
-    <div>Home</div>
-  )
+    <div>
+      <Homeheader/>
+      {/* Other content of the Home page */}
+    </div>
+  );
 }
 
-export default Home
+export default Home;

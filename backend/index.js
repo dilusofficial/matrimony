@@ -12,17 +12,21 @@ import employeeRoute from './routes/jobPortal/employee.js'
 import employerRoute from './routes/jobPortal/employer.js'
 import JobSeekerRoute from './routes/jobPortal/jobSeeker.js'
 import MatrimonyProfileRoute from './routes/matrimony/profile.js'
+import morgan from "morgan";
 const app = express()
-app.use(bodyParser.json()); 
+
+app.use(express.json());
+app.use(bodyParser.json());
+app.use(morgan('combined'));
+
 dotenv.config()
-app.use(express.json())
 const corsOptions = {
   origin: 'http://localhost:5173', 
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization'],
+  Credential:true
 };
 
-app.use(cors(corsOptions));
  
 passportSetup(passport)
 app.use(
@@ -30,9 +34,16 @@ app.use(
       secret: 'yourSecretKey21', 
       resave: false,
       saveUninitialized: false,
+      cookie:{
+        httpOnly:true,
+        secure:false,
+        maxAge:24*60*60*1000
+      }
     })
   );
 
+
+  app.use(cors(corsOptions));
   
 //routes
 app.use(cookieParser())
