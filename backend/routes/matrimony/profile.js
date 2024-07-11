@@ -6,12 +6,12 @@ const router = express.Router()
 
 router.post('/createProfile',createProfile)
 router.get('/searchProfiles', searchProfiles);
-router.get('/getProfile/:singleUID',verifyProfile,viewAUser);
-router.post('/sendRequest',sendRequest)
+router.get('/getProfile/:id',verifyProfile,viewAUser);
+router.post('/sendRequest/:id',verifyProfile,sendRequest)
 router.post('/acceptRequest',acceptRequest)
 router.post('/rejectTheRequest',rejectTheRequest)
 // router.get('/listOfRequests/:profileId',requestListOfUser)
-router.get('/listOfRequests/:userId', requestListOfUser);
-router.get('/listOfSentRequest/:profileId',listOfSentRequest)
-router.get('/listOfAccepted/:id',listOfAccepted)
+router.get('/listOfRequests/:id',verifyProfile, requestListOfUser);
+router.get('/listOfSentRequest/:id',verifyProfile,listOfSentRequest)
+router.get('/listOfAccepted/:id',verifyProfile,listOfAccepted)
 export default router

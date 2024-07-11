@@ -32,7 +32,7 @@ export const verifyUser = (req, res, next) => {
   export const verifyProfile = (req,res,next)=>{
     verifyToken(req,res,async()=>{
       const userRefId = req.user.id
-      const profileId = req.params.singleUID
+      const profileId = req.params.id
       console.log(userRefId);
       const findProfileWithUserId = await Profile.findOne({
         $and: [

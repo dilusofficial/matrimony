@@ -1,17 +1,24 @@
-import { useState, useEffect, useContext } from 'react';
+import { useState, useEffect, useContext} from 'react';
 import img1 from '../../assets/pexels-edmond-dantes-4344677.jpg';
 import img2 from '../../assets/pexels-n-voitkevich-6214471.jpg';
 import img3 from '../../assets/pexels-rocsana99-948185.jpg';
 // import { loginCall } from '../../context/customHooks/Api';
-import { AuthContext } from '../../context/customHooks/AuthContext';
+
+import { useNavigate } from 'react-router-dom';
+import axios from "axios";
+
+// import { AuthContext } from '../../context/customHooks/AuthContext';
 import { toast } from 'react-toastify';
 
+
 const images = [img1, img2, img3];
+
+
 
 function Login() {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   // const { user, isFetching, error, dispatch } = useContext(AuthContext);
-
+  const navigate = useNavigate()
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentImageIndex((prevIndex) => (prevIndex + 1) % images.length);
@@ -19,6 +26,7 @@ function Login() {
 
     return () => clearInterval(interval);
   }, [currentImageIndex]);
+
 
   const [phoneNumber, setPhoneNumber] = useState('');
   const [email, setEmail] = useState('');
@@ -39,19 +47,28 @@ function Login() {
   // };
 
   const handleLogin = async () => {
-    const loginData = loginMethod === 'phone' ? { phoneNumber, password } : { email, password };
-    try{
-      if (res.status === 201) {
-        const res = await axios.post("http://localhost:8003/api/auth/login",user);
-          toast.success('Login successful');
-        } else{
-          toast.error('Login failed. Please check your credentials and try again.');
-        }
-  }catch(err){
-      toast.error('Login failed. Please check your credentials and try again.');
-      console.log("login error", err);
-  }
+    try {
+      const loginData = loginMethod === 'phone' ? { phoneNumber, password } : { email, password };
+      console.log(loginData);
+      const response = await axios.post('http://localhost:8003/api/auth/login', loginData, { withCredentials: true });
+      console.log(response);
+      const token = response.data
+      console.log(token);
+      if (response.status === 201) {
+       
+        // const token = response.data.token;
+        // const decodedToken = jwt.decode(token);
+        // console.log('Decoded JWT Token:', decodedToken);
+        navigate('/home');
+      } else {
+        alert('Login failed. Please check your credentials and try again.');
+      }
+    } catch (error) {
+      alert('Login failed. Please check your credentials and try again.');
+      console.error('Login error:', error);
+    }
   };
+
 
     
 
@@ -116,7 +133,8 @@ function Login() {
             className="w-full bg-black text-white p-2 rounded-lg mb-6 hover:bg-white hover:text-black hover:border hover:border-gray-300"
             onClick={handleLogin}
           >
-            {isFetching ? "Signing in..." : "Sign in"}
+            {/* {isFetching ? "Signing in..." :"Sign in"} */}
+            Sign in
           </button>
           <button className="w-full border border-gray-300 text-md p-2 rounded-lg mb-6 hover:bg-black hover:text-white">
             <img src="google.svg" alt="img" className="w-6 h-6 inline mr-2" />

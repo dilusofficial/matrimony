@@ -2,6 +2,7 @@ import express from "express"
 import passport from "passport"
 import twilio from 'twilio'
 import dotenv from 'dotenv'
+import jwt from "jsonwebtoken"
 import {Login, Register, getUserData, otp_sent, verify_otp} from "../controllers/authControl.js"
 import { verifyToken, verifyUser } from "../utils/verifyToken.js"
 import { createError } from "../utils/error.js"
@@ -48,25 +49,34 @@ router.get('/user/:userId',verifyUser,getUserData);
 
 router.get('/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
 
+
+
 router.get('/google/callback',
     passport.authenticate('google', { failureRedirect: 'http://localhost:8003/api/auth/login' }),
     (req, res) => {
         const isNew = req.user.isNew; 
         const userId = req.user.user._id;
-        const userPwd = req.user.user.password
+        const user = req.user.user;
+        console.log(user);
+        const userPwd = req.user.user.password;
+        console.log("userPassword",userPwd);
         const token = jwt.sign({
             userId
-        },process.env.JWT,{expiresIn:'3h'}
-    )
-        // console.log(req.user.user);
-        if (isNew&&userPwd==='') {
+        },
+        process.env.JWT, // Make sure to use the correct environment variable
+        {expiresIn: '3h'}
+    );
+        if (user.password==="") {
+            res.cookie('token', token, { httpOnly: true, secure: false, maxAge: 36000000 });
             res.redirect(`http://localhost:5173/register/${userId}`);
-            res.cookie
+            
         } else {
+            res.cookie('token', token, { httpOnly: true, secure: false, maxAge: 36000000 });
             res.redirect('http://localhost:5173/home');
         }
     }
 );
+
 
 router.post('/send-otp',otp_sent)
 

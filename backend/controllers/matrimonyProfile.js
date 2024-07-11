@@ -62,6 +62,8 @@ export const viewAUser = async (req, res) => {
 
 export const sendRequest = async (req, res) => {
     const { fromUID, toUID } = req.body;
+    // const fromUID = req.params.id
+    // const {toUID} = req.body
     if (!fromUID || !toUID) {
         return res.status(404).json({ message: "One or both user IDs are not found" });
     }
@@ -71,7 +73,7 @@ export const sendRequest = async (req, res) => {
     }
 
     const duplicateRequest = await MatrimonyProfileconnection.findOne({
-        fromUID: toUID,
+        fromUID: fromUID,
         toUID: fromUID
     })
     if (duplicateRequest) {
@@ -97,10 +99,36 @@ export const sendRequest = async (req, res) => {
 
 
 
+export const canelSentRequest =async(req,res)=>{
+
+    const { fromUID, toUID } = req.body;
+      // const fromUID = req.params.id
+    // const {toUID} = req.body
+    const findRequest = await MatrimonyProfileconnection.findOne({
+        fromUID: fromUID,
+        toUID: toUID
+    })
+    try {
+        if(findRequest){
+            const cancelRequest = await MatrimonyProfileconnection.findOneAndDelete({
+                fromUID: fromUID,
+                toUID: toUID
+            })
+        }
+        res.status(200).json({ message: "Request cancelled successfully" });
+    } catch (error) {
+        console.log(error); 
+    }
+}
+
+
+
 
 export const acceptRequest = async (req, res) => {
     const { requestFromId } = req.body;
     const { requestToId } = req.body;
+     // const requestToId = req.params.id
+    // const {requestFromId} = req.body
     console.log("requestFromId", requestFromId);
     console.log("requestToId", requestToId);
     try {
@@ -127,6 +155,8 @@ export const acceptRequest = async (req, res) => {
 export const rejectTheRequest = async (req, res) => {
     const { requestFromId } = req.body;
     const { requestToId } = req.body;
+    // const requestToId = req.params.id
+    // const {requestFromId} = req.body
 
     try {
         const findConnectionRequest = await MatrimonyProfileconnection.findOne({ fromUID: requestFromId, toUID: requestToId });
@@ -151,7 +181,7 @@ export const rejectTheRequest = async (req, res) => {
 
 export const requestListOfUser = async (req, res) => {
     try {
-        const { userId } = req.params;
+        const userId  = req.params.id;
         console.log(`Fetching requests for userId: ${userId}`);
 
         const profiles = await MatrimonyProfileconnection.find({
@@ -168,7 +198,7 @@ export const requestListOfUser = async (req, res) => {
 
 export const listOfSentRequest = async (req, res) => {
     try {
-        const { profileId } = req.params;
+        const profileId  = req.params.id;
         console.log(`Fetching requests for profileId: ${profileId}`);
         const profiles = await MatrimonyProfileconnection.find({
             fromUID: profileId,
@@ -203,8 +233,8 @@ export const listOfRejection = async (req, res) => {
     const id = req.params.id;
     try {
         const rejections = await MatrimonyProfileconnection.find({
-            fromUID: profileId,
-            status: 'pending',
+            fromUID: id,
+            status: 'reject',
         })
         console.log(rejections);
         res.status(200).json(rejections)

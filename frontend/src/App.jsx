@@ -14,8 +14,8 @@ import ContinueOptionPage from './pages/Yes or/YesOrNo';
 import MatrimonyHome from './pages/matrimonyHome/MatrimonyHome';
 import FilterPage from './pages/filtering page/FilterPage';
 import SingleUserPage from './pages/singleMUProfilePage/SingleUserPage';
-import { useContext } from 'react';
-import { AuthContext } from './context/customHooks/AuthContext';
+// import { useContext } from 'react';
+// import { AuthContext } from './context/customHooks/AuthContext';
 import Activity from './pages/Activity/Activity';
 import Sent from './pages/Activity/sent/Sent';
 import Accept from './pages/Activity/accept/Accept';
@@ -23,15 +23,16 @@ import Reject from './pages/Activity/reject/Reject';
 import Chat from './pages/Activity/chat/Chat';
 
 function App() {
-  const { user } = useContext(AuthContext);
-  console.log(user);
+  // const { user } = useContext(AuthContext);
+  // console.log(user);
 
 
   return (
     <Router>
       <Routes> 
-        <Route path="/" element={user ? <Home /> : <Login />} />
-        {/* <Route path="/" element={<Login />} /> */}
+        {/* <Route path="/" element={user ? <Home /> : <Login />} /> */}
+        <Route path="/home" element={<Home/>} />
+        <Route path="/" element={<Login />} />
         <Route path="/register/:userId" element={<Register />} />
         <Route path="/google" element={<Google />} />
         <Route path="/EmploymentSelectionPage/:userRefId_ER" element={<EmploymentSelectionPage />} />
@@ -49,7 +50,7 @@ function App() {
         <Route path='/reject'element={<Reject/>}/>
         <Route path='/chat' element={<Chat/>}/>
         <Route path="/matrimonySingleUserView/:singleUID" element={<SingleUserPage />} />
-        <Route path="*" element={user ? <Home /> : <Login />} />
+        {/* <Route path="*" element={user ? <Home /> : <Login />} /> */}
       </Routes>
     </Router>
   );
